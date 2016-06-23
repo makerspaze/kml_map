@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>leocj</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+        function initMap() {
+        var myLatLng = {lat: 9.99327567, lng: 76.35579297};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: myLatLng
+        });
+
+        loadKml=function(opts,map){
+     var layer=new google.maps.KmlLayer();
+     opts.preserveViewport=true;
+     if(map){opts.map=map;}
+
+     google.maps.event.addListener(layer,'defaultviewport_changed',function(){
+         var map=this.getMap(),
+             bounds=map.get('kmlBounds')||this.getDefaultViewport();
+
+         bounds.union(this.getDefaultViewport());
+         map.set('kmlBounds',bounds);
+         map.fitBounds(bounds);
+     });
+     layer.setOptions(opts);
+     return layer;
+  }
+        var ctaLayYYer = loadKml({
+          url: 'https://appdevexpress.firebaseapp.com/leo_marker.kml',
+          map: map
+        });
+        var biz = loadKml({
+          url: 'https://appdevexpress.firebaseapp.com/leo_poly.kml',
+          map: map
+        });
+
+      }
+    </script>
+
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBn77YDN4BQehV934EuBWwy4CRZMV0X_o&callback=initMap">
+    </script>
+  </body>
+</html>
